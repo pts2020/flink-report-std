@@ -28,7 +28,7 @@
         <maven-war.version>2.1.1</maven-war.version>
         <maven-jar.version>2.6</maven-jar.version>
         <maven-install.version>2.5.1</maven-install.version>
-        <c3p0.version>0.9.5.2</c3p0.version>
+        <c3p0.version>0.9.5.4</c3p0.version>
         <main.scope>compile</main.scope>
     </properties>
     <profiles>
