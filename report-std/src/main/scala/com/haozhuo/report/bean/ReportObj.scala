@@ -8,6 +8,8 @@ class ReportObj extends Serializable {
   @BeanProperty
   @JsonProperty("healthReportId") var healthReportId: String = ""
   @BeanProperty
+  @JsonProperty("age") var age: String = ""
+  @BeanProperty
   @JsonProperty("name") var name: String = ""
   @BeanProperty
   @JsonProperty("userId") var userId: String = ""
@@ -35,6 +37,8 @@ class ReportObj extends Serializable {
   @JsonProperty("reportCreateTime") var reportCreateTime: String = ""
   @BeanProperty
   @JsonProperty("lastUpdateTime") var lastUpdateTime: String = ""
+  @BeanProperty
+  @JsonProperty("addReportTime") var addReportTime: String = ""
 
   override def toString = s"Report($healthReportId, $name, $userId, $idCardNoMd5, $birthday, $sex, $checkUnitCode, $checkUnitName, $checkDate, $dwdm, $dwmc, $userLoadTime, $reportCreateTime, $lastUpdateTime,$reportContent)"
 }

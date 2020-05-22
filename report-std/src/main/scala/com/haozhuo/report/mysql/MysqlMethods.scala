@@ -15,21 +15,18 @@ import scala.collection.mutable
 object MysqlMethods {
   private val logger: Logger = LoggerFactory.getLogger(classOf[MysqlMethods])
   val result = queryItemIndexNameMysql()
-
-  val itemMap: mutable.HashMap[String, String]=result._1
-  val indexMap: mutable.HashMap[String,Array[String]]=result._2
-
-
+  val sugMap = querySugMap()
 
   def queryItemIndexNameMysql()={
+    logger.info("加载标准化映射表：index_map")
     var index_name: String = ""
     var item_name: String = ""
     var index_type: String = ""
     var std_item_name: String = ""
     var std_index_name: String = ""
     var std_type: String = ""
-    val itemMap1: mutable.HashMap[String, String] = mutable.HashMap()
-    val indexMap1: mutable.HashMap[String,Array[String]] = mutable.HashMap()
+    val indexMap: mutable.HashMap[String,Array[String]] = mutable.HashMap()
+    //val indexMap1: mutable.HashMap[String,String] = mutable.HashMap()
     var conn: Connection = null
     var preparedStmt: PreparedStatement = null
     var i =1
@@ -40,18 +37,18 @@ object MysqlMethods {
       //preparedStmt = conn.prepareStatement("select * from check_index_name_map ;")
       val resultSet = preparedStmt.executeQuery()
        while (resultSet.next()) {
-        var array = new Array[String](3)
-        index_name = resultSet.getString("index_name")
-        item_name = resultSet.getString("item_name")
-        index_type = resultSet.getString("index_type")
-        std_index_name = resultSet.getString("std_index_name")
-        std_item_name = resultSet.getString("std_item_name")
-        std_type = resultSet.getString("std_type")
-        itemMap1.put(item_name.trim,std_item_name)
-        array(0) = std_index_name.trim
-        array(1) = index_type.trim
-        array(2) = std_type.trim
-        indexMap1.put(item_name.trim+index_name.trim,array)
+        var array = new Array[String](4)
+        index_name = resultSet.getString("index_name").trim
+        item_name = resultSet.getString("item_name").trim
+        index_type = resultSet.getString("index_type").trim
+        std_index_name = resultSet.getString("std_index_name").trim
+        std_item_name = resultSet.getString("std_item_name").trim
+        std_type = resultSet.getString("std_type").trim
+         array(0) = std_item_name
+        array(1) = std_index_name
+        array(2) = index_type
+        array(3) = std_type
+        indexMap.put(item_name+index_name,array)
       }
 
     } catch {
@@ -60,8 +57,49 @@ object MysqlMethods {
     } finally {
       DataSource.close(preparedStmt, conn)
     }
-   (itemMap1,indexMap1)
+   indexMap
   }
+  def querySugMap()={
+    logger.info("加载标准化映射表：sug_map")
+    var sug_name: String = ""
+    var std_sug_name: String = ""
+    var body: String = ""
+    var check_mode: String = ""
+    var abnormal_label: String = ""
+    val sugMap: mutable.HashMap[String,Array[String]] = mutable.HashMap()
+    //val indexMap1: mutable.HashMap[String,String] = mutable.HashMap()
+    var conn: Connection = null
+    var preparedStmt: PreparedStatement = null
+    var i =1
+    try {
+      conn = JdbcConfig.getDataetlConnection
+      //val resultSet2 = conn.createStatement().executeQuery("select * from check_index_name_map ;")
+      preparedStmt = conn.prepareStatement("select sug_name,std_sug_name,body,check_mode,abnormal_label from check_sug_name_map ")
+      //preparedStmt = conn.prepareStatement("select * from check_index_name_map ;")
+      val resultSet = preparedStmt.executeQuery()
+      while (resultSet.next()) {
+        var array = new Array[String](4)
+        sug_name = resultSet.getString("sug_name").trim
+        std_sug_name = resultSet.getString("std_sug_name").trim
+        body = resultSet.getString("body").trim
+        check_mode = resultSet.getString("check_mode").trim
+        abnormal_label = resultSet.getString("abnormal_label").trim
+        array(0) = std_sug_name
+        array(1) = body
+        array(2) = check_mode
+        array(3) = abnormal_label
+        sugMap.put(sug_name,array)
+      }
+
+    } catch {
+      case e: Exception =>
+        logger.error("Error", e)
+    } finally {
+      DataSource.close(preparedStmt, conn)
+    }
+    sugMap
+  }
+
 }
 
 class MysqlMethods {}

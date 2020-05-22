@@ -66,5 +66,6 @@ class CheckResult extends Serializable{
   @JsonProperty("checkIndexType") var checkIndexType: String = ""
 
 
+
   override def toString = s"CheckResult($appendInfo, $canExplain, $result, $checkIndexName, $stdCheckIndexName, $highValueRef, $isAbandon, $isCalc, $lowValueRef, $resultFlagId, $resultTypeId, $resultValue, $stdResultValue, $showIndex, $textRef, $stdTextRef, $unit, $stdType, $checkIndexType)"
 }

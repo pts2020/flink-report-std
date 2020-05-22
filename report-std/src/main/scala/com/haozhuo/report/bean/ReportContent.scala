@@ -12,13 +12,13 @@ import scala.beans.BeanProperty
 class ReportContent extends Serializable{
 
   @BeanProperty
-  @JsonProperty("checkItems") var checkItems: util.ArrayList[ChkItem] = null
+  @JsonProperty("checkItems") var checkItems: Array[ChkItem] = null
 
   @BeanProperty
-  @JsonProperty("generalSummarys") var generalSummarys: util.ArrayList[GeneralSummary1] = null
+  @JsonProperty("generalSummarys") var generalSummarys: Array[GeneralSummary1] = null
 
   @BeanProperty
-  @JsonProperty("generalSummarys2") var generalSummarys2: util.ArrayList[String]=null
+  @JsonProperty("generalSummarys2") var generalSummarys2: Array[String]=null
 
   override def toString = s"ReportContent($checkItems, $generalSummarys, $generalSummarys2)"
 }

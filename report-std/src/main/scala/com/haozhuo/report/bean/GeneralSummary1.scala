@@ -44,6 +44,9 @@ class GeneralSummary1 extends Serializable{
   @BeanProperty
   @JsonProperty("abnormalLabel") var abnormalLabel: String=""
 
+  @BeanProperty
+  @JsonProperty("stdSummaryName") var stdSummaryName: String=""
 
-  override def toString = s"GeneralSummary1($fw, $isPrivacy, $result, $reviewAdvice, $summaryAdvice, $summaryDescription, $summaryMedicalExplanation, $summaryName, $summaryReasonResult, $body, $checkMode, $abnormalLabel)"
+
+  override def toString = s"GeneralSummary1($fw, $isPrivacy, $result, $reviewAdvice, $summaryAdvice, $summaryDescription, $summaryMedicalExplanation, $summaryName, $summaryReasonResult, $body, $checkMode, $abnormalLabel, $stdSummaryName)"
 }

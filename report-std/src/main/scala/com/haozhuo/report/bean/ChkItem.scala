@@ -17,7 +17,7 @@ class ChkItem extends Serializable {
   @JsonProperty("stdCheckItemName") var stdCheckItemName: String = ""
 
   @BeanProperty
-  @JsonProperty("checkResults") var checkResults: util.ArrayList[CheckResult]=null
+  @JsonProperty("checkResults") var checkResults: Array[CheckResult]=null
 
   @BeanProperty
   @JsonProperty("checkStateId") var checkStateId: String = ""
