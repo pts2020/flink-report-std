@@ -35,7 +35,7 @@ object StdApp {
               //logger.error("报告json转对象失败:{}" + ex.getMessage)
               new Report()
           }
-        }).map(new StdFuc())
+        }).map(new StdMapFunction())
       .addSink(new StdSinkFunction())
     env.execute("ReportStd")
   }

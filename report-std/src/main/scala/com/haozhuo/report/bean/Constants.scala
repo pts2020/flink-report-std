@@ -8,6 +8,6 @@ import com.haozhuo.flink.common.Props
 object Constants {
 
   val KAFKA_REPORT_STD = Props.get("kafka.topic.report-std","report")
-  val KAFKA_NEWS_RCMD_REQUEST = Props.get("kafka.topic.news-rcmd-request","news-rcmd-request")
+  val KAFKA_REPORT_SINK = Props.get("kafka.topic.report-sink","report-sink")
 
 }

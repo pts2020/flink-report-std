@@ -12,10 +12,16 @@ class GeneralSummary1 extends Serializable{
   @JsonProperty("fw") var fw: String = ""
 
   @BeanProperty
+  @JsonProperty("stdFw") var stdFw: String = ""
+
+  @BeanProperty
   @JsonProperty("isPrivacy") var isPrivacy: String = ""
 
   @BeanProperty
   @JsonProperty("result") var result: String=""
+
+  @BeanProperty
+  @JsonProperty("stdResult") var stdResult: String=""
 
   @BeanProperty
   @JsonProperty("reviewAdvice") var reviewAdvice: String = ""
@@ -48,5 +54,4 @@ class GeneralSummary1 extends Serializable{
   @JsonProperty("stdSummaryName") var stdSummaryName: String=""
 
 
-  override def toString = s"GeneralSummary1($fw, $isPrivacy, $result, $reviewAdvice, $summaryAdvice, $summaryDescription, $summaryMedicalExplanation, $summaryName, $summaryReasonResult, $body, $checkMode, $abnormalLabel, $stdSummaryName)"
 }

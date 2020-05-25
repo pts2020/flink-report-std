@@ -1,9 +1,11 @@
 package com.haozhuo.report.mysql
 
-import java.sql.{Connection, PreparedStatement}
+import java.sql.{Connection, PreparedStatement, Timestamp}
 import java.util
 
 import com.haozhuo.flink.common.{DataSource, JdbcConfig}
+import com.haozhuo.report.bean.Report
+import com.haozhuo.util.StrUtils
 import org.apache.flink.table.api.scala.map
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -16,6 +18,25 @@ object MysqlMethods {
   private val logger: Logger = LoggerFactory.getLogger(classOf[MysqlMethods])
   val result = queryItemIndexNameMysql()
   val sugMap = querySugMap()
+
+  def saveToMysql(report: Report,reportContent:String) = {
+    var conn: Connection = null
+    var preparedStmt: PreparedStatement = null
+    try {
+      conn = JdbcConfig.getDataetlConnection
+      preparedStmt = conn.prepareStatement("Replace INTO  `report_std_content` (`health_report_id`, `create_date`, `report_content`,`report_create_time`,`etl_time`) VALUES(?,?,?,?,?) ")
+      preparedStmt.setString(1, report.obj.healthReportId)
+      preparedStmt.setDate(2, StrUtils.strToDate(report.obj.reportCreateTime.substring(0,10)))
+      preparedStmt.setString(3,reportContent)
+      preparedStmt.setTimestamp(4,Timestamp.valueOf(report.obj.reportCreateTime))
+      preparedStmt.setTimestamp(5,new Timestamp(System.currentTimeMillis()))
+      preparedStmt.execute()
+    } catch {
+      case e: Exception => logger.info("Error", e)
+    } finally {
+      DataSource.close(preparedStmt, conn)
+    }
+  }
 
   def queryItemIndexNameMysql()={
     logger.info("加载标准化映射表：index_map")

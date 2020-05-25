@@ -8,7 +8,7 @@ class ReportObj extends Serializable {
   @BeanProperty
   @JsonProperty("healthReportId") var healthReportId: String = ""
   @BeanProperty
-  @JsonProperty("age") var age: String = ""
+  @JsonProperty("age") var age: Integer = 0
   @BeanProperty
   @JsonProperty("name") var name: String = ""
   @BeanProperty

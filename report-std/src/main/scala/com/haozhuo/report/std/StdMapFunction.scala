@@ -7,12 +7,13 @@ import org.slf4j.{Logger, LoggerFactory}
 
 
 /**
-  * Created by DELL on 2020/5/16 23:16
+  * Created by zbj on 2020/5/16 23:16
   */
-class StdFuc extends RichMapFunction[Report,Report]{
-  private val logger: Logger = LoggerFactory.getLogger(classOf[StdFuc])
+class StdMapFunction extends RichMapFunction[Report,Report]{
+  private val logger: Logger = LoggerFactory.getLogger(classOf[StdMapFunction])
 
   override def map(value: Report): Report = {
+    val beginTime: Long = System.currentTimeMillis
     var report:Report = value
     report.obj.reportContent.checkItems.map(
       x=>{
@@ -23,6 +24,10 @@ class StdFuc extends RichMapFunction[Report,Report]{
               if(MysqlMethods.result.get(chkItemName+chkIndexName)!=None){
                 stdItems(chkItemName,chkIndexName,x,y)
               }
+              //清洗范围
+              stdTextRef(x,y)
+              //清洗单位
+              y.setUnit(y.unit.trim)
             })
       }
     )
@@ -42,20 +47,24 @@ class StdFuc extends RichMapFunction[Report,Report]{
           x.setCheckMode(check_mode)
           x.setAbnormalLabel(abnormal_label)
         }
+        if(CleanMethod.is_numberic_data(x.result)==1){
+          x.setStdResult(CleanMethod.result_value_replace(x.result.trim))
+          if(CleanMethod.textRefClean(x.fw)._4==0){
+            x.setStdFw(CleanMethod.textRefClean(x.fw)._1)
+          }
+        }
     })
 
     if(report.obj.birthday!=null){
       try {
-        println("计算年龄")
         val age = Integer.valueOf(report.obj.checkDate.substring(0,4))-Integer.valueOf(report.obj.birthday.substring(0,4))
-        report.obj.setAge(age.toString)
-        println("年龄："+report.obj.age)
+        report.obj.setAge(age)
       }catch {
         case ex:Exception=>
           logger.info("年龄计算错错误："+ex)
       }
     }
-    report.obj.setAge("31")
+    logger.info("标准化cost：{}ms", System.currentTimeMillis - beginTime)
     report
   }
 
@@ -76,21 +85,23 @@ class StdFuc extends RichMapFunction[Report,Report]{
     y.setStdCheckIndexName(stdIndexName)
     y.setCheckIndexType(indexType)
     y.setStdType(stdType)
-    y.setUnit(y.unit.trim)
+
+    }
+
+
+  def stdTextRef(x:ChkItem,y:CheckResult): Unit = {
     //根据结果值判断指标类型
     val flag = CleanMethod.get_chk_item_data_type(y)
-    if(flag==0){
+    if (flag.equals(0)) {
       y.setResultTypeId(0)
       val stdValue = CleanMethod.result_value_replace(y.resultValue.trim)
       y.setStdResultValue(stdValue)
-      val textRef = CleanMethod.text_ref_replace(y.textRef)
-      if(textRef._4==0){
+      val textRef = CleanMethod.textRefClean(y.textRef)
+      if (textRef._4 == 0) {
         y.setStdTextRef(textRef._1)
         y.setLowValueRef(textRef._2)
         y.setHighValueRef(textRef._3)
       }
     }
   }
-
-
 }

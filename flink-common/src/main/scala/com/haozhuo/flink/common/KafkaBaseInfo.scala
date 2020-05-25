@@ -62,6 +62,6 @@ trait KafkaBaseInfo {
     in the documentation, the producer is safe to used in a multi-threaded environment
     and hence you should re-use the same instance.
     */
-    producer.send(new ProducerRecord[String, String](topicName, null, msg))
+    producer.send(new ProducerRecord[String, String](topicName,null,msg))
   }
 }
