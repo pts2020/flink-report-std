@@ -17,7 +17,7 @@
         <scala.version>2.11.8</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <kafka.version>0.10.2.0</kafka.version>
-        <flink.version>1.7.1</flink.version>
+        <flink.version>1.9.2</flink.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <zookeeper.version>3.4.6</zookeeper.version>
